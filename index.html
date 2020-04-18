@@ -16,8 +16,7 @@
   </head>
   <body>
     <div id="periscope">
-      <img id="video-frame">
-      <canvas id="screen" width=640 height=320></canvas>
+      <canvas id="screen" width=640 height=480></canvas>
     </div>
     <div id="controls">
       <h2 id="control-msg"></h2>
@@ -72,7 +71,7 @@
         var buffer32 = new Uint32Array(idata.data.buffer);  // get 32-bit view
 
         (function loop() {
-          if (lastImage == null || (lastImage - (new Date())) > 10000) {
+          if (lastImage == null || ((new Date()) - lastImage) > 10000) {
             noise(ctx);
           }
           requestAnimationFrame(loop)
@@ -186,7 +185,7 @@
         socket.on('frame', function (frame) {
           lastImage = new Date();
           let base64Img = 'data:image/jpg;base64,' + frame;
-          $('#video-frame').attr('src', base64Img);
+
           var image = new Image();
           image.onload = function() {
             ctx.drawImage(image, 0, 0);
