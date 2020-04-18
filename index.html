@@ -22,23 +22,31 @@
         <tr>
           <td></td>
           <td>
-            <button class="control-key" data-control="forward" id="ctrlFwd">Forward</button>
+            <svg class="control-key" data-control="forward" width="50px" height="50px" fill="#888" viewBox="0 0 100 100">
+              <path d="M50 0 L100 100 L0 100 Z" />
+            </svg>
           </td>
           <td></td>
         </tr>
         <tr>
           <td>
-            <button class="control-key" data-control="left" id="ctrlLft">Left</button>
+            <svg class="control-key" data-control="left" width="50px" height="50px" fill="#888" viewBox="0 0 100 100" transform="rotate(-90)">
+              <path d="M50 0 L100 100 L0 100 Z" />
+            </svg>
           </td>
           <td></td>
           <td>
-            <button class="control-key" data-control="right" id="ctrlRgt">Right</button>
+            <svg class="control-key" data-control="right" width="50px" height="50px" fill="#888" viewBox="0 0 100 100" transform="rotate(90)">
+              <path d="M50 0 L100 100 L0 100 Z" />
+            </svg>
           </td>
         </tr>
         <tr>
           <td></td>
           <td>
-            <button class="control-key" data-control="backward" id="ctrlBwd">Backward</button>
+            <svg class="control-key" data-control="backward" width="50px" height="50px" fill="#888" viewBox="0 0 100 100" transform="rotate(180)">
+              <path d="M50 0 L100 100 L0 100 Z" />
+            </svg>
           </td>
           <td></td>
         </tr>
@@ -46,7 +54,8 @@
     </div>
     <ul id="messages"></ul>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script>
 
       $(function () {
@@ -54,6 +63,11 @@
         function sendControl (control) {
           let c = "s";
           let msg = "Stop!"
+          $("svg[data-control='forward']").attr("fill", "#888")
+          $("svg[data-control='backward']").attr("fill", "#888")
+          $("svg[data-control='left']").attr("fill", "#888")
+          $("svg[data-control='right']").attr("fill", "#888")
+          $("svg[data-control='" + control + "']").attr("fill", "#000")
           switch (control) {
             case "forward":
               msg = "Move forward"
@@ -88,12 +102,12 @@
         // Initialize control keys
         var socket = io();
         $(".control-key")
-          .mousedown(function() {
+          .on("touchstart mousedown", function() {
             let c = $(this).data("control")
             console.log("Sending", c)
             sendControl(c);
           })
-          .mouseup(function () {
+          .on("touchend mouseup", function () {
             sendControl("stop");
           })
 
