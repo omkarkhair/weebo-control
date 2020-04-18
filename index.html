@@ -11,11 +11,13 @@
       #periscope { text-align: center; }
       #controls { text-align: center; }
       #controls table { margin-left: auto; margin-right: auto; }
+      #screen {background:#000}
     </style>
   </head>
   <body>
     <div id="periscope">
       <img id="video-frame">
+      <canvas id="screen" width=640 height=320></canvas>
     </div>
     <div id="controls">
       <h2 id="control-msg"></h2>
@@ -60,6 +62,33 @@
     <script>
 
       $(function () {
+
+        let lastImage = null;
+
+        // White noise
+        let c = document.getElementById("screen");
+        var ctx = c.getContext("2d", {alpha: false});       // context without alpha channel.
+        var idata = ctx.createImageData(c.width, c.height); // create image data
+        var buffer32 = new Uint32Array(idata.data.buffer);  // get 32-bit view
+
+        (function loop() {
+          if (lastImage == null || (lastImage - (new Date())) > 10000) {
+            noise(ctx);
+          }
+          requestAnimationFrame(loop)
+        })()
+
+        function noise(ctx) {
+          var len = buffer32.length - 1;
+          while(len--) buffer32[len] = Math.random() < 0.5 ? 0 : -1>>0;
+          ctx.putImageData(idata, 0, 0);
+          ctx.font = "20px Arial";
+          ctx.fillStyle = "blue";
+          ctx.fillText("No Signal", 20, 40)
+          ctx.font = "30px Arial";
+          ctx.fillText("Weebo offline", 20, 70)
+        }
+
         // Initialize control routines
         function sendControl (control) {
           let c = "s";
@@ -155,7 +184,14 @@
         });
 
         socket.on('frame', function (frame) {
-          $('#video-frame').attr('src', 'data:image/jpg;base64,' + frame);
+          lastImage = new Date();
+          let base64Img = 'data:image/jpg;base64,' + frame;
+          $('#video-frame').attr('src', base64Img);
+          var image = new Image();
+          image.onload = function() {
+            ctx.drawImage(image, 0, 0);
+          };
+          image.src = base64Img;
         })
         
       });
