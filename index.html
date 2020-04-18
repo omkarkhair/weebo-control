@@ -99,6 +99,36 @@
           socket.emit('weebo-control', c);
         }
 
+        
+
+        $(document).keydown(function(e) {
+            switch(e.which) {
+                case 37: // left
+                  sendControl("left");
+                break;
+
+                case 38: // up
+                  sendControl("forward");
+                break;
+
+                case 39: // right
+                  sendControl("right");
+                break;
+
+                case 40: // down
+                  sendControl("backward");
+                break;
+
+                default: return; // exit this handler for other keys
+            }
+            e.preventDefault(); // prevent the default action (scroll / move caret)
+        });
+
+        $(document).keyup(function(e) {
+            sendControl("stop");
+            e.preventDefault(); // prevent the default action (scroll / move caret)
+        });
+
         // Load camera feed
 
         // Initialize control keys
@@ -127,6 +157,7 @@
         socket.on('frame', function (frame) {
           $('#video-frame').attr('src', 'data:image/jpg;base64,' + frame);
         })
+        
       });
     </script>
   </body>
