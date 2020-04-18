@@ -18,11 +18,12 @@
       <img id="video-frame">
     </div>
     <div id="controls">
+      <h2 id="control-msg"></h2>
       <table style="width: 200px;">
         <tr>
           <td></td>
           <td>
-            <svg class="control-key" data-control="forward" width="50px" height="50px" fill="#888" viewBox="0 0 100 100">
+            <svg class="control-key" data-control="forward" width="100px" height="100px" fill="#888" viewBox="0 0 100 100">
               <path d="M50 0 L100 100 L0 100 Z" />
             </svg>
           </td>
@@ -30,13 +31,13 @@
         </tr>
         <tr>
           <td>
-            <svg class="control-key" data-control="left" width="50px" height="50px" fill="#888" viewBox="0 0 100 100">
+            <svg class="control-key" data-control="left" width="100px" height="100px" fill="#888" viewBox="0 0 100 100">
               <path d="M0 50 L100 0 L100 100 Z" />
             </svg>
           </td>
           <td></td>
           <td>
-            <svg class="control-key" data-control="right" width="50px" height="50px" fill="#888" viewBox="0 0 100 100">
+            <svg class="control-key" data-control="right" width="100px" height="100px" fill="#888" viewBox="0 0 100 100">
               <path d="M100 50 L0 100 L0 0 Z" />
             </svg>
           </td>
@@ -44,7 +45,7 @@
         <tr>
           <td></td>
           <td>
-            <svg class="control-key" data-control="backward" width="50px" height="50px" fill="#888" viewBox="0 0 100 100">
+            <svg class="control-key" data-control="backward" width="100px" height="100px" fill="#888" viewBox="0 0 100 100">
               <path d="M50 100 L100 0 L0 0 Z" />
             </svg>
           </td>
@@ -70,30 +71,31 @@
           $("svg[data-control='" + control + "']").attr("fill", "#000")
           switch (control) {
             case "forward":
-              msg = "Move forward"
+              msg = "Moving forward"
               c = "f"
               break;
             
             case "backward":
-              msg = "Move backward"
+              msg = "Moving backward"
               c = "b"
               break;
 
             case "left":
-              msg = "Move left"
+              msg = "Moving left"
               c = "l"
               break;
             
             case "right":
-              msg = "Move right"
+              msg = "Moving right"
               c = "r"
               break;
 
             default:
-              msg = "Stop!"
+              msg = "Stopped"
               c = "s"
               break;
           }
+          $("#control-msg").html(msg)
           socket.emit('weebo-control', c);
         }
 
